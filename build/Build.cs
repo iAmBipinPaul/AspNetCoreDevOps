@@ -203,6 +203,10 @@ class Build : NukeBuild
 
                       tag = "github-latest";
                   }
+                  else
+                  {
+                      tag = $"github-{branch}";
+                  }
               }
           }        
       });
