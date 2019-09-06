@@ -179,6 +179,7 @@ class Build : NukeBuild
 
               if (TeamServices.Instance != null)
               {
+                 
                   branch = "azuredevops-"+TeamServices.Instance.SourceBranchName.ToString();
                   buildNumber = TeamServices.Instance.BuildNumber.ToString();
                   var pullId = TeamServices.Instance.PullRequestId.ToString();
@@ -196,6 +197,7 @@ class Build : NukeBuild
 
               if (TeamServices.Instance==null && AppVeyor.Instance == null && Travis.Instance == null)
               {
+                 
                   branch = GitRepository.Branch;
 
                   if (GitRepository.Branch.ToLower() == "master")
@@ -208,6 +210,11 @@ class Build : NukeBuild
                       tag = $"github-{branch}";
                   }
               }
+          }
+          else
+          {
+              Console.WriteLine("Not on server");
+              tag = $"not-server-build";
           }        
       });
 
