@@ -194,7 +194,7 @@ class Build : NukeBuild
                   }
               }
 
-              if (TeamServices.Instance==null && AppVeyor.Instance != null && Travis.Instance != null)
+              if (TeamServices.Instance==null && AppVeyor.Instance == null && Travis.Instance == null)
               {
                   branch = GitRepository.Branch;
 
