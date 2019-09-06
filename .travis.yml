@@ -7,6 +7,4 @@ solution: AspNetCoreDevOps.sln
 services:
   - docker
 script:
-  - dotnet tool install -g Cake.Tool 
-  - export PATH=$HOME/.dotnet/tools:$PATH
-  - dotnet cake build.cake 
+  - dotnet run  --project ./build/_build.csproj -GitHubAccessToken $GITHUB_ACCESS_TOKEN

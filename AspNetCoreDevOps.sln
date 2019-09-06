@@ -17,20 +17,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreDevOps.Tests.Core
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreDevOps.Controllers.Tests", "test\AspNetCoreDevOps.Controllers.Tests\AspNetCoreDevOps.Controllers.Tests.csproj", "{6B3A50D7-DC36-413F-84DD-5BA1234CC93C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{718C2E3B-DF1A-47C9-9DEB-A654B8D22E1C}"
-	ProjectSection(SolutionItems) = preProject
-		.appveyor.yml = .appveyor.yml
-		.travis.yml = .travis.yml
-		azure-pipelines.yml = azure-pipelines.yml
-		deploy.sh = deploy.sh
-		docker-compose.yml = docker-compose.yml
-		dockerfile = dockerfile
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F50B6254-5014-4C53-8AD0-400E9709760C}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6B89B252-60EC-4ABB-801A-7453DDEBC319}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{822A32EA-95B7-4371-A6D0-2E6C45C3A6C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +48,10 @@ Global
 		{6B3A50D7-DC36-413F-84DD-5BA1234CC93C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B3A50D7-DC36-413F-84DD-5BA1234CC93C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B3A50D7-DC36-413F-84DD-5BA1234CC93C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{822A32EA-95B7-4371-A6D0-2E6C45C3A6C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{822A32EA-95B7-4371-A6D0-2E6C45C3A6C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{822A32EA-95B7-4371-A6D0-2E6C45C3A6C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{822A32EA-95B7-4371-A6D0-2E6C45C3A6C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +61,7 @@ Global
 		{2AED53AE-729E-4879-BAC9-F33B3B0C7E33} = {205A63FB-B6BB-42DD-B729-AE8C94953ECD}
 		{1600D16B-6291-4A2A-B55B-A44B98311E91} = {2269EF1A-5A03-4AFC-A01B-1E15A336167C}
 		{6B3A50D7-DC36-413F-84DD-5BA1234CC93C} = {2269EF1A-5A03-4AFC-A01B-1E15A336167C}
+		{822A32EA-95B7-4371-A6D0-2E6C45C3A6C7} = {6B89B252-60EC-4ABB-801A-7453DDEBC319}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4EA9FE73-A93A-406D-878E-8D3E20F02347}
