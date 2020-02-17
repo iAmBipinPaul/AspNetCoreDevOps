@@ -1,16 +1,19 @@
 using System;
 using Nuke.Common;
+using Nuke.Common.CI.AppVeyor;
+using Nuke.Common.CI.AzurePipelines;
+using Nuke.Common.CI.TravisCI;
 using Nuke.Common.Execution;
 using Nuke.Common.Git;
+using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using Nuke.Common.Tools.Docker;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
-using Nuke.Docker;
-using Nuke.Common.BuildServers;
 
 [CheckBuildProjectConfigurations]
 [UnsetVisualStudioEnvironmentVariables]
@@ -29,8 +32,7 @@ class Build : NukeBuild
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
-    [GitVersion] readonly GitVersion GitVersion;
-
+    
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath TestsDirectory => RootDirectory / "test";
     AbsolutePath TestsProject => RootDirectory / "test/AspNetCoreDevOps.Controllers.Tests/AspNetCoreDevOps.Controllers.Tests.csproj";
@@ -55,6 +57,7 @@ class Build : NukeBuild
         });
 
     Target Restore => _ => _
+    .DependsOn(Clean)
         .Executes(() =>
         {
             DotNetRestore(s => s
@@ -133,17 +136,17 @@ class Build : NukeBuild
       {
           if (IsServerBuild)
           {
-              if (Travis.Instance != null)
+              if (TravisCI.Instance != null)
               {
-                  branch ="travis-" + Travis.Instance.Branch.ToString();
-                  buildNumber = Travis.Instance.BuildNumber.ToString();
-                  var pullId = Travis.Instance.PullRequest;
+                  branch = "travis-" + TravisCI.Instance.Branch.ToString();
+                  buildNumber = TravisCI.Instance.BuildNumber.ToString();
+                  var pullId = TravisCI.Instance.PullRequest;
                   if (pullId.ToLower() != "false")
                   {
                       branch = $"travis-Pull-{pullId}";
                   }
                   tag = $"{branch}-{buildNumber}";
-                  if (Travis.Instance.Branch.ToLower() == "master")
+                  if (TravisCI.Instance.Branch.ToLower() == "master")
                   {
 
                       tag = "travis-latest";
@@ -151,7 +154,7 @@ class Build : NukeBuild
               }
               if (AppVeyor.Instance != null)
               {
-                  branch = "appveyor-"+AppVeyor.Instance.RepositoryBranch.ToString();
+                  branch = "appveyor-" + AppVeyor.Instance.RepositoryBranch.ToString();
                   buildNumber = AppVeyor.Instance.BuildNumber.ToString();
                   try
                   {
@@ -164,40 +167,40 @@ class Build : NukeBuild
                   catch (Exception)
                   {
 
-                    //  throw;
+                      //  throw;
                   }
-                
+
                   tag = $"{branch}-{buildNumber}";
                   if (AppVeyor.Instance.RepositoryBranch.ToLower() == "master")
                   {
 
                       tag = "appveyor-latest";
-                     
+
                   }
 
               }
 
-              if (TeamServices.Instance != null)
+              if (AzurePipelines.Instance != null)
               {
-                 
-                  branch = "azuredevops-"+TeamServices.Instance.SourceBranchName.ToString();
-                  buildNumber = TeamServices.Instance.BuildNumber.ToString();
-                  var pullId = TeamServices.Instance.PullRequestId.ToString();
+
+                  branch = "azuredevops-" + AzurePipelines.Instance.SourceBranchName.ToString();
+                  buildNumber = AzurePipelines.Instance.BuildNumber.ToString();
+                  var pullId = AzurePipelines.Instance.PullRequestId.ToString();
                   if (pullId.ToLower() != "null")
                   {
                       branch = $"azuredevops-Pull-{pullId}";
                   }
                   tag = $"{branch}-{buildNumber}";
-                  if (TeamServices.Instance.SourceBranchName.ToLower() == "master")
+                  if (AzurePipelines.Instance.SourceBranchName.ToLower() == "master")
                   {
 
                       tag = "azuredevops-latest";
                   }
               }
 
-              if (TeamServices.Instance==null && AppVeyor.Instance == null && Travis.Instance == null)
+              if (AzurePipelines.Instance == null && AppVeyor.Instance == null && TravisCI.Instance == null)
               {
-                 
+
                   branch = GitRepository.Branch;
 
                   if (GitRepository.Branch.ToLower() == "master")
@@ -215,7 +218,7 @@ class Build : NukeBuild
           {
               Console.WriteLine("Not on server");
               tag = $"not-server-build";
-          }        
+          }
       });
 
     Target PushDockerImage => _ => _
@@ -240,6 +243,4 @@ class Build : NukeBuild
        {
            Console.WriteLine(GitRepository.Branch);
        });
-
-
 }

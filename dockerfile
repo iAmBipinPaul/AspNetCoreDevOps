@@ -1,12 +1,10 @@
-FROM microsoft/dotnet:2.2.100-sdk-alpine3.8 AS buildimg
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1.101-alpine3.10 AS buildimg
 WORKDIR /app
 COPY . .
-RUN dotnet restore
-RUN dotnet build
 WORKDIR /app/src/AspNetCoreDevOps.Api
 RUN dotnet publish -c  Release -o output
 
-FROM microsoft/dotnet:2.2.0-aspnetcore-runtime-alpine3.8
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.1-alpine3.10
 WORKDIR output
 COPY --from=buildimg /app/src/AspNetCoreDevOps.Api/output .
 ENTRYPOINT ["dotnet","AspNetCoreDevOps.Api.dll"]
