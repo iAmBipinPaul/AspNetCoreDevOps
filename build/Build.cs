@@ -2,6 +2,7 @@ using System;
 using Nuke.Common;
 using Nuke.Common.CI.AppVeyor;
 using Nuke.Common.CI.AzurePipelines;
+using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.CI.TravisCI;
 using Nuke.Common.Execution;
 using Nuke.Common.Git;
@@ -152,7 +153,7 @@ class Build : NukeBuild
                       tag = "travis-latest";
                   }
               }
-              if (AppVeyor.Instance != null)
+              else if (AppVeyor.Instance != null)
               {
                   branch = "appveyor-" + AppVeyor.Instance.RepositoryBranch.ToString();
                   buildNumber = AppVeyor.Instance.BuildNumber.ToString();
@@ -179,8 +180,7 @@ class Build : NukeBuild
                   }
 
               }
-
-              if (AzurePipelines.Instance != null)
+              else if(AzurePipelines.Instance != null)
               {
 
                   branch = "azuredevops-" + AzurePipelines.Instance.SourceBranchName.ToString();
@@ -197,15 +197,11 @@ class Build : NukeBuild
                       tag = "azuredevops-latest";
                   }
               }
-
-              if (AzurePipelines.Instance == null && AppVeyor.Instance == null && TravisCI.Instance == null)
+              else if (GitHubActions.Instance != null)
               {
-
                   branch = GitRepository.Branch;
-
                   if (GitRepository.Branch.ToLower() == "master")
                   {
-
                       tag = "github-latest";
                   }
                   else
