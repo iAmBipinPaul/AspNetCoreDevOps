@@ -199,7 +199,7 @@ class Build : NukeBuild
               }
               else if (GitHubActions.Instance != null)
               {
-                  branch = GitRepository.Branch;
+                  branch = "nuke";
                   if (GitRepository.Branch.ToLower() == "master")
                   {
                       tag = "github-latest";
