@@ -158,6 +158,7 @@ class Build : NukeBuild
               else if (AppVeyor.Instance != null)
               {
                   branch = "appveyor-" + AppVeyor.Instance.RepositoryBranch.ToString();
+                  buildNumber = AppVeyor.Instance.BuildNumber.ToString();
                   tag = $"{branch}-{buildNumber}";
                   if (AppVeyor.Instance.RepositoryBranch.ToLower() == "master")
                   {
