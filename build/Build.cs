@@ -26,7 +26,7 @@ class Build : NukeBuild
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
 
-    public static int Main() => Execute<Build>(x => x.LogoutFromDockerHub);
+    public static int Main() => Execute<Build>(x => x.BuildDockerImage);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -88,10 +88,14 @@ class Build : NukeBuild
         .DependsOn(Test)
         .Executes(() =>
         {
-
-            DockerTasks.DockerBuild(b =>
-           b.SetFile(DockerFilePath.ToString())
-            .SetPath(".")
+            var buildContext = ".";
+            if (IsLocalBuild)
+            {
+                buildContext="../";
+            }
+            DockerTasks.DockerBuild(b =>           
+            b.SetFile(DockerFilePath.ToString())
+           .SetPath(buildContext)
            .SetTag($"{repo}:{tag}")
        );
         });
@@ -103,7 +107,7 @@ class Build : NukeBuild
             DockerTasks.DockerLogin(l => l
             .SetServer("docker.pkg.github.com")
             .SetUsername(user)
-                .SetPassword(GitHubAccessToken)
+             .SetPassword(GitHubAccessToken)
 
             );
         });
@@ -115,9 +119,9 @@ class Build : NukeBuild
           DockerTasks.DockerRun(l =>
           l
           .SetDetach(true)
-          .SetName("travis_db")
+          .SetName("test_db")
           .SetPublish("1234:5432")
-          .SetEnv("POSTGRES_USER=admin", "POSTGRES_PASSWORD=1q2w3e", "POSTGRES_DB=travisdb")
+          .SetEnv("POSTGRES_USER=admin", "POSTGRES_PASSWORD=1q2w3e", "POSTGRES_DB=testdb")
           .SetImage("postgres")
           );
       });
@@ -141,72 +145,39 @@ class Build : NukeBuild
               {
                   branch = "travis-" + TravisCI.Instance.Branch.ToString();
                   buildNumber = TravisCI.Instance.BuildNumber.ToString();
-                  var pullId = TravisCI.Instance.PullRequest;
-                  if (pullId.ToLower() != "false")
-                  {
-                      branch = $"travis-Pull-{pullId}";
-                  }
                   tag = $"{branch}-{buildNumber}";
                   if (TravisCI.Instance.Branch.ToLower() == "master")
                   {
-
                       tag = "travis-latest";
                   }
               }
               else if (AppVeyor.Instance != null)
               {
-                  branch = "appveyor-" + AppVeyor.Instance.RepositoryBranch.ToString();
-                  buildNumber = AppVeyor.Instance.BuildNumber.ToString();
-                  try
-                  {
-                      var pullId = AppVeyor.Instance.PullRequestNumber.ToString();
-                      if (pullId.ToLower() != "0")
-                      {
-                          branch = $"appveyor-Pull-{pullId}";
-                      }
-                  }
-                  catch (Exception)
-                  {
-
-                      //  throw;
-                  }
-
+                  branch = "appveyor-" + AppVeyor.Instance.RepositoryBranch.ToString();              
                   tag = $"{branch}-{buildNumber}";
                   if (AppVeyor.Instance.RepositoryBranch.ToLower() == "master")
                   {
-
                       tag = "appveyor-latest";
-
-                  }
-
-              }
+                  }              }
               else if(AzurePipelines.Instance != null)
               {
-
                   branch = "azuredevops-" + AzurePipelines.Instance.SourceBranchName.ToString();
-                  buildNumber = AzurePipelines.Instance.BuildNumber.ToString();
-                  var pullId = AzurePipelines.Instance.PullRequestId.ToString();
-                  if (pullId.ToLower() != "null")
-                  {
-                      branch = $"azuredevops-Pull-{pullId}";
-                  }
+                  buildNumber = AzurePipelines.Instance.BuildNumber.ToString();              
                   tag = $"{branch}-{buildNumber}";
                   if (AzurePipelines.Instance.SourceBranchName.ToLower() == "master")
                   {
-
                       tag = "azuredevops-latest";
                   }
               }
               else if (GitHubActions.Instance != null)
-              {
-                  branch = "nuke";
+              { 
                   if (GitRepository.Branch.ToLower() == "master")
                   {
                       tag = "github-latest";
                   }
                   else
                   {
-                      tag = $"github-{branch}";
+                      tag = $"github-{GitRepository.Branch}-{GitHubActions.Instance.GitHubSha}";
                   }
               }
           }
