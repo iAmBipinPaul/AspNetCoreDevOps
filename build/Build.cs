@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI.AppVeyor;
 using Nuke.Common.CI.AzurePipelines;
@@ -177,7 +178,7 @@ class Build : NukeBuild
                   }
                   else
                   {
-                      tag = $"github-{GitRepository.Branch}-{GitHubActions.Instance.GitHubSha}";
+                      tag = $"github-{GitRepository.Branch.Split('/').Last()}-{GitHubActions.Instance.GitHubSha}";
                   }
               }
           }
