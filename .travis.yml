@@ -1,8 +1,8 @@
-dist: xenial
+dist: jammy
 sudo: required
 language: csharp
 mono: none
-dotnet: 6.0.402
+dotnet: 8.0.203
 solution: AspNetCoreDevOps.sln
 services:
   - docker
