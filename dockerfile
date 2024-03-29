@@ -7,7 +7,9 @@ RUN dotnet publish -c  Release -o output
 FROM mcr.microsoft.com/dotnet/aspnet:8.0.3-alpine3.19-amd64
 WORKDIR output
 COPY --from=buildimg /app/src/AspNetCoreDevOps.Api/output .
+
+LABEL org.opencontainers.image.source https://github.com/iAmBipinPaul/AspNetCoreDevOps
+
 ENTRYPOINT ["dotnet","AspNetCoreDevOps.Api.dll"]
 
 
-LABEL org.opencontainers.image.source https://github.com/iAmBipinPaul/AspNetCoreDevOps
