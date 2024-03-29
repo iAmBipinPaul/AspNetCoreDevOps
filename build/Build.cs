@@ -6,20 +6,16 @@ using Nuke.Common.CI.AppVeyor;
 using Nuke.Common.CI.AzurePipelines;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.CI.TravisCI;
-using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.Docker;
 using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.IO.FileSystemTasks;
-using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
-[CheckBuildProjectConfigurations]
-[UnsetVisualStudioEnvironmentVariables]
+
 class Build : NukeBuild
 {
     /// Support plugins are available for:
@@ -47,7 +43,7 @@ class Build : NukeBuild
     string branch = "";
     [Parameter("Github access token for packages")]
     readonly string GitHubAccessToken;
-    string repo = "docker.pkg.github.com/iambipinpaul/aspnetcoredevops/aspnetcoredevops";
+    string repo = "ghcr.io/iambipinpaul/aspnetcoredevops";
     string user = "iambipinpaul";
 
     Target Clean => _ => _
@@ -103,7 +99,7 @@ class Build : NukeBuild
         .Executes(() =>
         {
             DockerTasks.DockerLogin(b => b
-            .SetServer("docker.pkg.github.com")
+            .SetServer("ghcr.io")
             .SetUsername(user)
              .SetPassword(GitHubAccessToken)
 
@@ -184,7 +180,7 @@ class Build : NukeBuild
                   }
                   else
                   {
-                      tag = $"github-{GitRepository.Branch.Split('/').Last()}-{GitHubActions.Instance.GitHubSha}";
+                      tag = $"github-{GitRepository.Branch.Split('/').Last()}-{GitHubActions.Instance.RunId}";
                   }
               }
           }
@@ -206,7 +202,7 @@ class Build : NukeBuild
         .Executes(() =>
         {
             DockerTasks.DockerLogout(b => b
-           .SetServer("docker.pkg.github.com")
+           .SetServer("ghcr.io")
            );
         });
     Target CheckBranch => _ => _

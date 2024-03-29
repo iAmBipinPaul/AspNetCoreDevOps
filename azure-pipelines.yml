@@ -1,10 +1,10 @@
 pool:
-   vmImage: 'Ubuntu 18.04'   
+   vmImage: 'ubuntu-latest'   
 variables:
    buildConfiguration: 'Release' 
 steps:
-  - task: DotNetCoreInstaller@0
+  - task: UseDotNet@2
     inputs:
-        version: '6.0.402' # replace this value with the version that you need for your project
+        version: '8.x' # replace this value with the version that you need for your project
   - script: |
         dotnet run  --project ./build/_build.csproj -GitHubAccessToken $(GithubAccessToken)
