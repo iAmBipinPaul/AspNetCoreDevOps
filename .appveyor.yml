@@ -1,7 +1,0 @@
-version: '1.0.{build}'
-image: ubuntu
-services:
-- docker
-build_script:
-  -  dotnet run  --project ./build/_build.csproj -GitHubAccessToken $GITHUB_ACCESS_TOKEN
-deploy: off
