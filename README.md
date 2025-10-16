@@ -1,3 +1,7 @@
+## Solution structure
+
+![Solution structure](docs/solution-structure.svg)
+
 ## Continuous integration 
 
 | Build server                | Platform                    | Build status                                                                                                                                                                                            | Integration tests |
