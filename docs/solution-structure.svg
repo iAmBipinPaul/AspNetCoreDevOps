@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="640" viewBox="0 0 1000 640" role="img" aria-label="Solution structure diagram">
+  <style>
+    .box { fill: #f6f8fa; stroke: #2d2d2d; stroke-width: 1.5px; rx: 6px; }
+    .group { fill: #ffffff; stroke: #1f6feb; stroke-width: 2px; rx: 8px; }
+    .title { font: bold 16px sans-serif; fill: #0b3d91; }
+    .label { font: 13px sans-serif; fill: #111827; }
+    .small { font: 12px sans-serif; fill: #374151; }
+    .arrow { stroke: #6b7280; stroke-width: 2; marker-end: url(#arrowhead); fill: none; }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280" />
+    </marker>
+  </defs>
+
+  <!-- Header -->
+  <text x="24" y="32" class="title">AspNetCoreDevOps - Solution Structure</text>
+  <text x="24" y="54" class="small">(Auto-generated diagram showing projects and relationships)</text>
+
+  <!-- Source group -->
+  <rect x="28" y="80" width="300" height="140" class="group" />
+  <text x="40" y="106" class="label">src</text>
+  <rect x="40" y="120" width="260" height="92" class="box" />
+  <text x="60" y="145" class="label">AspNetCoreDevOps.Api</text>
+  <text x="60" y="165" class="small">- Controllers</text>
+  <text x="60" y="185" class="small">- Data / Migrations</text>
+
+  <!-- Tools group -->
+  <rect x="360" y="80" width="260" height="120" class="group" />
+  <text x="372" y="106" class="label">tools</text>
+  <rect x="384" y="120" width="236" height="72" class="box" />
+  <text x="404" y="145" class="label">AspNetCoreDevOps.Seeder</text>
+  <text x="404" y="165" class="small">- DB seeder (console)</text>
+
+  <!-- Test group -->
+  <rect x="660" y="80" width="300" height="140" class="group" />
+  <text x="672" y="106" class="label">test</text>
+  <rect x="680" y="120" width="260" height="92" class="box" />
+  <text x="700" y="145" class="label">AspNetCoreDevOps.Controllers.Tests</text>
+  <text x="700" y="165" class="small">AspNetCoreDevOps.Tests.Core (shared test helpers)</text>
+
+  <!-- Build project -->
+  <rect x="28" y="260" width="360" height="110" class="group" />
+  <text x="40" y="290" class="label">build</text>
+  <rect x="52" y="308" width="320" height="60" class="box" />
+  <text x="72" y="335" class="label">_build (Nuke)</text>
+  <text x="72" y="353" class="small">Targets: Clean, Restore, Compile, Test, Docker</text>
+
+  <!-- CI / Docker -->
+  <rect x="420" y="260" width="540" height="110" class="group" />
+  <text x="432" y="290" class="label">CI &amp; Deployment</text>
+  <rect x="444" y="308" width="504" height="60" class="box" />
+  <text x="464" y="335" class="label">azure-pipelines.yml</text>
+  <text x="464" y="353" class="label">dockerfile (multi-stage publish + runtime)</text>
+
+  <!-- Arrows: relationships -->
+  <path d="M 300 156 L 360 156" class="arrow" />
+  <text x="312" y="146" class="small">uses / references</text>
+
+  <path d="M 640 156 L 660 156" class="arrow" />
+
+  <path d="M 220 260 L 220 308" class="arrow" />
+  <path d="M 500 308 L 420 308" class="arrow" />
+
+  <!-- Project relationships -->
+  <path d="M 300 168 L 384 168" class="arrow" />
+  <path d="M 520 154 L 680 154" class="arrow" />
+
+  <!-- Footnote -->
+  <text x="24" y="400" class="small">Notes:</text>
+  <text x="24" y="418" class="small">- `src/AspNetCoreDevOps.Api` is the web app; tests live under `test/` and the DB seeder under `tools/`.</text>
+  <text x="24" y="434" class="small">- Build orchestration uses Nuke (`build/_build.csproj`).</text>
+  <text x="24" y="450" class="small">- Dockerfile and `azure-pipelines.yml` drive CI/CD and container builds.</text>
+
+  <!-- Border -->
+  <rect x="12" y="12" width="976" height="616" rx="12" fill="none" stroke="#e5e7eb" stroke-width="1" />
+</svg>
