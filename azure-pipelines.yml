@@ -5,6 +5,6 @@ variables:
 steps:
   - task: UseDotNet@2
     inputs:
-        version: '8.x' # replace this value with the version that you need for your project
+        version: '9.x' # updated to .NET 9 for this repository
   - script: |
         dotnet run  --project ./build/_build.csproj -GitHubAccessToken $(GithubAccessToken)
