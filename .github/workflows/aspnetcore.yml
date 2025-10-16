@@ -4,12 +4,15 @@ on:
     branches: [ main ]
 jobs:
   build:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write   # ✅ only allow writing to GitHub Packages
+      contents: read
     steps:
     - uses: actions/checkout@master
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
     - name: buld with Nuke
-      run: dotnet run  --project ./build/_build.csproj -GitHubAccessToken ${{ secrets.GithubAccessToken }}
+      run: dotnet run  --project ./build/_build.csproj -GitHubAccessToken ${{ secrets.GITHUB_TOKEN  }}
