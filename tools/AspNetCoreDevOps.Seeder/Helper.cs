@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AspNetCoreDevOps.Api.Data;
-
+using Microsoft.EntityFrameworkCore.Diagnostics;
 namespace AspNetCoreDevOps.Seeder
 {
     public class Helper
@@ -26,7 +26,8 @@ namespace AspNetCoreDevOps.Seeder
                 .UseNpgsql(
                     connectionString
                 )
-                .UseInternalServiceProvider(serviceProvider);
+                .UseInternalServiceProvider(serviceProvider)
+                .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
             var context = serviceProvider.GetService<ApplicationDbContext>();
             return context;
         }
